@@ -1,0 +1,64 @@
+{
+  "common": {
+    "cancel": "Отмена",
+    "back": "Назад",
+    "delete": "Удалить",
+    "create": "Создать",
+    "submit": "Отправить",
+    "sending": "Отправка...",
+    "save": "Сохранить",
+    "saving": "Сохранение...",
+    "edit": "Редактировать",
+    "profile": "Профиль",
+    "logout": "Выйти"
+  },
+  "buttons":{
+    "add_response": "Добавить ответ"
+  },
+  "navigation": {
+    "appeals": "Обращения",
+    "appeal_categories": "Категории обращений",
+    "responses": "Ответы"
+  },
+  "forms": {
+    "appeal":"Обращения",
+    "appeal_reference":"Номер обращения",
+    "response_text": "Текст ответа",
+
+    "category_name": "Название категории",
+    "created_at": "Дата создания",
+    "status": "Статус",
+    "region": "Регион",
+    "reference_number": "Номер обращения",
+    "sender_name": "Имя отправителя",
+    "sender_email": "Email отправителя",
+    "sender_phone": "Телефон отправителя",
+    "category": "Категория"
+  },
+  "placeholders": {
+    "select_appeal":"Выберите обращение",
+    "enter_response_text":"Введите текст ответа",
+    "search_appeals": "Поиск обращений",
+    "search_responses": "Поиск ответов",
+    "all_statuses": "Все статусы",
+    "select": "Выберите...",
+    "enter_name": "Введите название",
+    "search_appeal_category": "Поиск по категориям обращений",
+    "select_status": "Выберите статус",
+    "enter_region": "Введите регион"
+  },
+  "messages": {
+    "edit": "Редактировать",
+    "success": {
+      "updated": "{{item}} успешно обновлены",
+      "deleted": "{{item}} успешно удалены"
+    },
+    "error": {
+      "update": "Ошибка при обновлении {{item}}",
+      "delete": "Ошибка при удалении {{item}}"
+    }
+  },
+  "currency": {
+    "set": "Установить курс валют"
+  }
+}

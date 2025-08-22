@@ -1,0 +1,51 @@
+{
+  "common": {
+    "cancel": "Biykar qılıw",
+    "delete": "Өshiriw",
+    "create": "Jaratıw",
+    "submit": "Jiberiw",
+    "sending": "Jiberilip atır...",
+    "save": "Saqlaw",
+    "saving": "Saqlawda...",
+    "edit": "Өzgertiw",
+    "profile": "Profil",
+    "logout": "Shığıw"
+  },
+  "navigation": {
+    "appeals": "Murájáatlar",
+    "appeal_categories": "Murájáat kategoriyaları",
+    "responses": "Jáwaplar"
+  },
+  "forms": {
+    "category_name": "Kategoriya atı",
+    "created_at": "Jaratılgan waqtı",
+    "status": "Status",
+    "region": "Ostan",
+    "reference_number": "Murájáat nómeri",
+    "sender_name": "Jiberiwshiniń atı",
+    "sender_email": "Jiberiwshiniń email-i",
+    "sender_phone": "Jiberiwshiniń telefon nómeri",
+    "category": "Kategoriya"
+  },
+  "placeholders": {
+    "select": "Tallaw...",
+    "enter_name": "Atın kiritiń",
+    "search_appeal_category": "Murájáat kategoriyaları boyınsha izlew",
+    "select_status": "Statusın tallań",
+    "enter_region": "Ostannı kiritiń"
+  },
+  "messages": {
+    "edit": "Өzgertiw",
+    "success": {
+      "updated": "{{item}} tabıslı jańalandı",
+      "deleted": "{{item}} tabıslı өshirildi"
+    },
+    "error": {
+      "update": "{{item}} jańalawda qátelik",
+      "delete": "{{item}} өshiriwde qátelik"
+    }
+  },
+  "currency": {
+    "set": "Walýuta kursın belgilew"
+  }
+}

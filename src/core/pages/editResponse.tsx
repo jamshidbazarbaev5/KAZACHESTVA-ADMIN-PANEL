@@ -10,6 +10,7 @@ import {
   useUpdateResponseCustom,
 } from "../api/responses";
 import { useGetAppeals } from "../api/appeals";
+import { useGetStaff } from "../api/staff";
 import { useEffect, useState } from "react";
 
 interface TranslationFunction {
@@ -23,6 +24,7 @@ const responseFields = (
     reference_number: string;
     sender?: { full_name: string };
   }> = [],
+  staffOptions: { value: number; label: string }[] = [],
 ) => [
   {
     name: "appeal",
@@ -55,6 +57,14 @@ const responseFields = (
     placeholder: t("placeholders.select_status"),
     required: true,
   },
+  {
+    name: "answerer",
+    label: t("forms.answerer"),
+    type: "select",
+    options: staffOptions,
+    placeholder: t("placeholders.select_answerer"),
+    required: true,
+  },
 ];
 
 export default function EditResponsePage() {
@@ -76,7 +86,19 @@ export default function EditResponsePage() {
   const { data: appealsData } = useGetAppeals();
   const appeals = appealsData?.results || [];
 
-  const fields = responseFields(t, appeals);
+  // Fetch staff for the answerer select field
+  const { data: staffResponse } = useGetStaff({
+    params: {},
+  });
+
+  // Prepare staff options for the select field
+  const staffOptions =
+    staffResponse?.results?.map((staff) => ({
+      value: staff.id,
+      label: staff.full_name,
+    })) || [];
+
+  const fields = responseFields(t, appeals, staffOptions);
 
   // Set default values when response data is loaded
   useEffect(() => {
@@ -86,6 +108,7 @@ export default function EditResponsePage() {
         appeal: response.appeal?.id || 0,
         text: response.text || "",
         status: response.appeal?.status || "Рассматривается",
+        answerer: response.answerer || undefined,
       };
       console.log("Setting defaultValues:", newDefaultValues); // Debug log
       setDefaultValues(newDefaultValues);
@@ -99,6 +122,10 @@ export default function EditResponsePage() {
     const payload = {
       ...data,
       status: data.status || "Рассматривается",
+      answerer:
+        typeof data.answerer === "string"
+          ? parseInt(data.answerer)
+          : data.answerer,
       id: responseId,
     };
 

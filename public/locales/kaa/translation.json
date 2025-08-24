@@ -1,6 +1,7 @@
 {
   "common": {
     "cancel": "Biykar qılıw",
+    "back": "Artqa",
     "delete": "Өshiriw",
     "create": "Jaratıw",
     "submit": "Jiberiw",
@@ -8,15 +9,29 @@
     "save": "Saqlaw",
     "saving": "Saqlawda...",
     "edit": "Өzgertiw",
+    "update": "Jańalaw",
+    "answer": "Jáwap beriw",
+    "loading": "Júklenbekte",
     "profile": "Profil",
     "logout": "Shığıw"
+  },
+  "buttons": {
+    "add_response": "Jáwap qosıw",
+    "add_staff": "Xızmetker qosıw"
   },
   "navigation": {
     "appeals": "Murájáatlar",
     "appeal_categories": "Murájáat kategoriyaları",
-    "responses": "Jáwaplar"
+    "responses": "Jáwaplar",
+    "staff": "Xızmetkerler"
   },
   "forms": {
+    "appeal": "Murájáatlar",
+    "appeal_reference": "Murájáat nómeri",
+    "response_text": "Jáwap mátini",
+    "full_name": "Tolıq atı",
+    "phone": "Telefon",
+    "email": "Email",
     "category_name": "Kategoriya atı",
     "created_at": "Jaratılgan waqtı",
     "status": "Status",
@@ -25,24 +40,43 @@
     "sender_name": "Jiberiwshiniń atı",
     "sender_email": "Jiberiwshiniń email-i",
     "sender_phone": "Jiberiwshiniń telefon nómeri",
-    "category": "Kategoriya"
+    "category": "Kategoriya",
+    "attached_files": "Qosılgan fayllar",
+    "view_file": "Fayl kórıw",
+    "appeal_text": "Murájáat mátini",
+    "answerer": "Jáwapker"
   },
   "placeholders": {
+    "select_appeal": "Murájáat tallań",
+    "enter_response_text": "Jáwap mátinin kiritiń",
+    "search_appeals": "Murájáatlar boyınsha izlew",
+    "search_responses": "Jáwaplar boyınsha izlew",
+    "search_staff": "Xızmetkerler boyınsha izlew",
+    "enter_full_name": "Tolıq atın kiritiń",
+    "enter_phone": "Telefon nómerin kiritiń",
+    "enter_email": "Email adresin kiritiń",
+    "all_statuses": "Barlıq statuslar",
     "select": "Tallaw...",
     "enter_name": "Atın kiritiń",
     "search_appeal_category": "Murájáat kategoriyaları boyınsha izlew",
     "select_status": "Statusın tallań",
-    "enter_region": "Ostannı kiritiń"
+    "enter_region": "Ostannı kiritiń",
+    "select_answerer": "Jáwapkerni tallań"
   },
   "messages": {
     "edit": "Өzgertiw",
+    "details": "Tafsilotlar",
+    "existing_response": "Bar bolған jáwap",
     "success": {
+      "created": "{{item}} tabıslı jaratıldı",
       "updated": "{{item}} tabıslı jańalandı",
       "deleted": "{{item}} tabıslı өshirildi"
     },
     "error": {
+      "create": "{{item}} jaratıwda qátelik",
       "update": "{{item}} jańalawda qátelik",
-      "delete": "{{item}} өshiriwde qátelik"
+      "delete": "{{item}} өshiriwde qátelik",
+      "not_found": "{{item}} tapılmadı"
     }
   },
   "currency": {

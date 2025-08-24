@@ -9,12 +9,19 @@ export interface AppealReference {
   status: string;
 }
 
+export interface ResponseFile {
+  id: number;
+  file: string;
+}
+
 export interface Response {
   id: number;
   appeal: AppealReference;
   reference_number: string;
   text: string;
   status?: string;
+  answerer?: number;
+  response_files?: ResponseFile[];
 }
 
 export interface ResponsesResponse {
@@ -30,6 +37,8 @@ export interface CreateResponsePayload {
   appeal: number;
   text: string;
   status: string;
+  answerer: number;
+  files?: File[];
 }
 
 // API endpoints
@@ -66,6 +75,38 @@ export const useCreateResponseCustom = () => {
   return useMutation({
     mutationFn: async (payload: CreateResponsePayload) => {
       const response = await api.post<Response>("responses/create/", payload);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["responses"] });
+    },
+  });
+};
+
+// Custom hook for creating responses with file upload
+export const useCreateResponseWithFiles = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: CreateResponsePayload & { files?: File[] }) => {
+      const formData = new FormData();
+      formData.append("appeal", payload.appeal.toString());
+      formData.append("text", payload.text);
+      formData.append("status", payload.status);
+      formData.append("answerer", payload.answerer.toString());
+
+      // Add files if they exist
+      if (payload.files && payload.files.length > 0) {
+        payload.files.forEach((file) => {
+          formData.append("files", file);
+        });
+      }
+
+      const response = await api.post<Response>("responses/create/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       return response.data;
     },
     onSuccess: () => {

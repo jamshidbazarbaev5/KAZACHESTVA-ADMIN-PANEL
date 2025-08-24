@@ -1,11 +1,15 @@
 import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { ResourceTable } from "../helpers/ResourseTable";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ResourceForm } from "../helpers/ResourceForm";
 import { toast } from "sonner";
 import { type Appeal, useGetAppeals, useUpdateAppeal } from "../api/appeals";
+import { Button } from "@/components/ui/button";
+import { DownloadIcon } from "lucide-react";
+import api from "../api/api";
 
 interface TranslationFunction {
   (key: string, options?: Record<string, unknown>): string;
@@ -100,6 +104,7 @@ export default function AppealsPage() {
   const pageSize = 10;
 
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { data: appealsData, isLoading } = useGetAppeals({
     params: {
       // search: searchTerm,
@@ -123,10 +128,42 @@ export default function AppealsPage() {
 
   const { mutate: updateAppeal, isPending: isUpdating } = useUpdateAppeal();
 
-  // const handleEdit = (appeal: Appeal) => {
-  //   setEditingAppeal(appeal);
-  //   setIsFormOpen(true);
-  // };
+  const handleEdit = (appeal: Appeal) => {
+    navigate(`/edit-appeal/${appeal.id}`);
+  };
+
+  const handleAnswer = (appeal: Appeal) => {
+    navigate(`/answer-appeal/${appeal.id}`);
+  };
+
+  const handleDownloadPdf = async (appeal: Appeal) => {
+    try {
+      const response = await api.get(`appeals/${appeal.id}/pdf`, {
+        responseType: "blob",
+      });
+
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `appeal-${appeal.reference_number || appeal.id}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success(
+        t("messages.success.downloaded", { item: "PDF" }) ||
+          "PDF downloaded successfully",
+      );
+    } catch (error) {
+      console.error("Download failed:", error);
+      toast.error(
+        t("messages.error.download", { item: "PDF" }) ||
+          "Failed to download PDF",
+      );
+    }
+  };
 
   const handleUpdateSubmit = (data: Partial<Appeal>) => {
     if (!editingAppeal?.id) return;
@@ -187,7 +224,19 @@ export default function AppealsPage() {
         data={enhancedAppeals}
         columns={columns(t)}
         isLoading={isLoading}
-        // onEdit={handleEdit}
+        onEdit={handleEdit}
+        onAnswer={handleAnswer}
+        actions={(appeal) => (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleDownloadPdf(appeal)}
+            className="h-8 w-8 p-0 hover:bg-green-50 text-green-500"
+            title="Download PDF"
+          >
+            <DownloadIcon className="h-4 w-4" />
+          </Button>
+        )}
         // onDelete={handleDelete} // Uncomment if delete functionality is needed
         // onAdd={() => navigate('/create-appeal')} // Uncomment if create functionality is needed
         totalCount={totalCount}

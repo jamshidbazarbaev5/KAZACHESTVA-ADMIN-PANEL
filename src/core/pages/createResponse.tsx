@@ -9,12 +9,21 @@ import {
   useCreateResponseCustom,
 } from "../api/responses";
 import { useGetAppeals } from "../api/appeals";
+import { useGetStaff } from "../api/staff";
 
 interface TranslationFunction {
   (key: string, options?: Record<string, unknown>): string;
 }
 
-const responseFields = (t: TranslationFunction, appeals: any[] = []) => [
+const responseFields = (
+  t: TranslationFunction,
+  appeals: Array<{
+    id: number;
+    reference_number: string;
+    sender?: { full_name: string };
+  }> = [],
+  staffOptions: { value: number; label: string }[] = [],
+) => [
   {
     name: "appeal",
     label: t("forms.appeal"),
@@ -46,6 +55,14 @@ const responseFields = (t: TranslationFunction, appeals: any[] = []) => [
     placeholder: t("placeholders.select_status"),
     required: true,
   },
+  {
+    name: "answerer",
+    label: t("forms.answerer"),
+    type: "select",
+    options: staffOptions,
+    placeholder: t("placeholders.select_answerer"),
+    required: true,
+  },
 ];
 
 export default function CreateResponsePage() {
@@ -58,10 +75,29 @@ export default function CreateResponsePage() {
   const { data: appealsData } = useGetAppeals();
   const appeals = appealsData?.results || [];
 
-  const fields = responseFields(t, appeals);
+  // Fetch staff for the answerer select field
+  const { data: staffResponse } = useGetStaff({
+    params: {},
+  });
+
+  // Prepare staff options for the select field
+  const staffOptions =
+    staffResponse?.results?.map((staff) => ({
+      value: staff.id,
+      label: staff.full_name,
+    })) || [];
+
+  const fields = responseFields(t, appeals, staffOptions);
 
   const handleSubmit = (data: CreateResponsePayload) => {
-    createResponse(data, {
+    const payload = {
+      ...data,
+      answerer:
+        typeof data.answerer === "string"
+          ? parseInt(data.answerer)
+          : data.answerer,
+    };
+    createResponse(payload, {
       onSuccess: () => {
         toast.success(
           t("messages.success.created", {

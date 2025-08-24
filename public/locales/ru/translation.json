@@ -9,22 +9,29 @@
     "save": "Сохранить",
     "saving": "Сохранение...",
     "edit": "Редактировать",
+    "update": "Обновить",
+    "answer": "Ответить",
+    "loading": "Загрузка",
     "profile": "Профиль",
     "logout": "Выйти"
   },
-  "buttons":{
-    "add_response": "Добавить ответ"
+  "buttons": {
+    "add_response": "Добавить ответ",
+    "add_staff": "Добавить сотрудника"
   },
   "navigation": {
     "appeals": "Обращения",
     "appeal_categories": "Категории обращений",
-    "responses": "Ответы"
+    "responses": "Ответы",
+    "staff": "Сотрудники"
   },
   "forms": {
-    "appeal":"Обращения",
-    "appeal_reference":"Номер обращения",
+    "appeal": "Обращения",
+    "appeal_reference": "Номер обращения",
     "response_text": "Текст ответа",
-
+    "full_name": "Полное имя",
+    "phone": "Телефон",
+    "email": "Email",
     "category_name": "Название категории",
     "created_at": "Дата создания",
     "status": "Статус",
@@ -33,29 +40,43 @@
     "sender_name": "Имя отправителя",
     "sender_email": "Email отправителя",
     "sender_phone": "Телефон отправителя",
-    "category": "Категория"
+    "category": "Категория",
+    "attached_files": "Прикрепленные файлы",
+    "view_file": "Просмотреть файл",
+    "appeal_text": "Текст обращения",
+    "answerer": "Ответственный"
   },
   "placeholders": {
-    "select_appeal":"Выберите обращение",
-    "enter_response_text":"Введите текст ответа",
+    "select_appeal": "Выберите обращение",
+    "enter_response_text": "Введите текст ответа",
     "search_appeals": "Поиск обращений",
     "search_responses": "Поиск ответов",
+    "search_staff": "Поиск сотрудников",
+    "enter_full_name": "Введите полное имя",
+    "enter_phone": "Введите номер телефона",
+    "enter_email": "Введите email адрес",
     "all_statuses": "Все статусы",
     "select": "Выберите...",
     "enter_name": "Введите название",
     "search_appeal_category": "Поиск по категориям обращений",
     "select_status": "Выберите статус",
-    "enter_region": "Введите регион"
+    "enter_region": "Введите регион",
+    "select_answerer": "Выберите ответственного"
   },
   "messages": {
     "edit": "Редактировать",
+    "details": "Детали",
+    "existing_response": "Существующий ответ",
     "success": {
+      "created": "{{item}} успешно создан",
       "updated": "{{item}} успешно обновлены",
       "deleted": "{{item}} успешно удалены"
     },
     "error": {
+      "create": "Ошибка при создании {{item}}",
       "update": "Ошибка при обновлении {{item}}",
-      "delete": "Ошибка при удалении {{item}}"
+      "delete": "Ошибка при удалении {{item}}",
+      "not_found": "{{item}} не найден"
     }
   },
   "currency": {

@@ -6,6 +6,7 @@ import {
   Receipt,
   LogOut,
   User,
+  Users,
   ChevronDown,
   type LucideIcon,
   // PrinterCheck,
@@ -157,6 +158,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         icon: Receipt,
         label: t("navigation.responses"),
         href: "/responses",
+      },
+      {
+        icon: Users,
+        label: t("navigation.staff"),
+        href: "/staff",
       },
     ];
 

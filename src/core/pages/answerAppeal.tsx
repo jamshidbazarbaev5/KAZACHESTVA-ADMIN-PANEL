@@ -66,9 +66,7 @@ const responseFields = (
     label: t("forms.status"),
     type: "select",
     options: [
-      { value: "Рассматривается", label: "Рассматривается" },
       { value: "Принято", label: "Принято" },
-      { value: "Отправлено", label: "Отправлено" },
       { value: "Отказано", label: "Отказано" },
     ],
     placeholder: t("placeholders.select_status"),

@@ -1,55 +1,27 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ResourceForm } from "../helpers/ResourceForm";
-import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download, FileText, User, Phone, Mail, MapPin } from "lucide-react";
 import {
   type Appeal,
   useGetAppeal,
-  useUpdateAppeal,
 } from "../api/appeals";
 import { useEffect, useState } from "react";
 
-interface TranslationFunction {
-  (key: string, options?: Record<string, unknown>): string;
-}
 
-const appealEditFields = (t: TranslationFunction) => [
-  {
-    name: "status",
-    label: t("forms.status"),
-    type: "select",
-    options: [
-      { value: "Рассматривается", label: "Рассматривается" },
-      { value: "Принято", label: "Принято" },
-      { value: "Отправлено", label: "Отправлено" },
-      { value: "Отказано", label: "Отказано" },
-    ],
-    placeholder: t("placeholders.select_status"),
-    required: true,
-  },
-  {
-    name: "region",
-    label: t("forms.region"),
-    type: "text",
-    placeholder: t("placeholders.enter_region"),
-    required: false,
-  },
-];
 
 export default function EditAppealPage() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
-  const [defaultValues, setDefaultValues] = useState<Partial<Appeal>>({});
+  const [_defaultValues, setDefaultValues] = useState<Partial<Appeal>>({});
 
   const appealId = id ? parseInt(id, 10) : 0;
 
   const { data: appeal, isLoading: isLoadingAppeal, error } = useGetAppeal(appealId);
-  const { mutate: updateAppeal, isPending: isUpdating } = useUpdateAppeal();
 
-  const fields = appealEditFields(t);
+  // const _fields = appealEditFields(t);
 
   // Set default values when appeal data is loaded
   useEffect(() => {
@@ -62,32 +34,7 @@ export default function EditAppealPage() {
     }
   }, [appeal]);
 
-  const handleSubmit = (data: Partial<Appeal>) => {
-    if (!appealId) return;
-
-    const payload = {
-      ...data,
-      id: appealId,
-    };
-
-    updateAppeal(payload as Appeal, {
-      onSuccess: () => {
-        toast.success(
-          t("messages.success.updated", {
-            item: t("navigation.appeals"),
-          }),
-        );
-        navigate("/appeals");
-      },
-      onError: () => {
-        toast.error(
-          t("messages.error.update", {
-            item: t("navigation.appeals"),
-          }),
-        );
-      },
-    });
-  };
+  
 
   const getStatusColor = (status: string) => {
     const statusColors = {
@@ -149,7 +96,7 @@ export default function EditAppealPage() {
           <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <FileText size={20} />
-              Appeal Information
+                {t('forms.appeal_information')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -174,13 +121,13 @@ export default function EditAppealPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Sender Quantity
+                  {t('forms.sender_quantity')}
                 </label>
                 <p className="text-gray-900">{appeal.sender_quantity}</p>
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Current Status
+               {t('forms.status')}
                 </label>
                 <span
                   className={`inline-block px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(appeal.status)}`}
@@ -193,7 +140,7 @@ export default function EditAppealPage() {
 
           {/* Appeal Text */}
           <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold mb-4">Appeal Text</h2>
+            <h2 className="text-lg font-semibold mb-4">{t('forms.appeal_text')}</h2>
             <div className="bg-gray-50 p-4 rounded-lg">
               <p className="text-gray-900 whitespace-pre-wrap">{appeal.text}</p>
             </div>
@@ -202,7 +149,7 @@ export default function EditAppealPage() {
           {/* Appeal Files */}
           {appeal.appeal_files && appeal.appeal_files.length > 0 && (
             <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="text-lg font-semibold mb-4">Attached Files</h2>
+              <h2 className="text-lg font-semibold mb-4">{t('forms.files')}</h2>
               <div className="space-y-2">
                 {appeal.appeal_files.map((file, index) => (
                   <div
@@ -222,7 +169,7 @@ export default function EditAppealPage() {
                       className="flex items-center gap-2"
                     >
                       <Download size={16} />
-                      View/Download
+                      {t('forms.download')}
                     </Button>
                   </div>
                 ))}
@@ -237,12 +184,12 @@ export default function EditAppealPage() {
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                 <div className="mb-2">
                   <span className="text-sm font-medium text-blue-800">
-                    Status: {appeal.appeal_response.status}
+                    {t('forms.status')}: {appeal.appeal_response.status}
                   </span>
                 </div>
                 <div className="mb-2">
                   <span className="text-sm text-blue-600">
-                    Created: {appeal.appeal_response.created_at}
+                    {t('forms.created_at')}: {appeal.appeal_response.created_at}
                   </span>
                 </div>
                 <p className="text-blue-900">{appeal.appeal_response.text}</p>
@@ -257,7 +204,7 @@ export default function EditAppealPage() {
           <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <User size={20} />
-              Sender Information
+             {t('forms.sender')}
             </h2>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
@@ -281,31 +228,21 @@ export default function EditAppealPage() {
               <div className="flex items-center gap-3">
                 <MapPin size={16} className="text-gray-500" />
                 <div>
-                  <p className="text-sm text-gray-600">Address:</p>
+                  <p className="text-sm text-gray-600">Адрес:</p>
                   <p className="text-gray-900">{appeal.sender.address}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin size={16} className="text-gray-500" />
                 <div>
-                  <p className="text-sm text-gray-600">Sender Region:</p>
+                  <p className="text-sm text-gray-600">Район:</p>
                   <p className="text-gray-900">{appeal.sender.region}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Edit Form */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold mb-4">Edit Appeal</h2>
-            <ResourceForm
-              fields={fields}
-              onSubmit={handleSubmit}
-              defaultValues={defaultValues}
-              isSubmitting={isUpdating}
-              key={JSON.stringify(defaultValues)} // Force re-render when defaultValues change
-            />
-          </div>
+       
         </div>
       </div>
     </div>

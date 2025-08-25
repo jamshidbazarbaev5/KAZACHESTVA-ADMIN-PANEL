@@ -3,7 +3,6 @@ import {
   Package,
   Menu,
   X,
-  Receipt,
   LogOut,
   User,
   Users,
@@ -154,11 +153,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         label: t("navigation.appeal_categories"),
         href: "/appeal-categories",
       },
-      {
-        icon: Receipt,
-        label: t("navigation.responses"),
-        href: "/responses",
-      },
+      // {
+      //   icon: Receipt,
+      //   label: t("navigation.responses"),
+      //   href: "/responses",
+      // },
       {
         icon: Users,
         label: t("navigation.staff"),

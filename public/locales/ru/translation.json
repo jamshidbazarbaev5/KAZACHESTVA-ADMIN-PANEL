@@ -26,6 +26,9 @@
     "staff": "Сотрудники"
   },
   "forms": {
+    "sender":"О9тправитель",
+    "sender_quantity":"Количество отправки",
+    "appeal_information":"Информация",
     "appeal": "Обращения",
     "appeal_reference": "Номер обращения",
     "response_text": "Текст ответа",

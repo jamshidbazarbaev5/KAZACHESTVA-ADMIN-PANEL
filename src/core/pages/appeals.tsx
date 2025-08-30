@@ -98,8 +98,10 @@ const columns = (t: TranslationFunction) => [
 export default function AppealsPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingAppeal, setEditingAppeal] = useState<Appeal | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, _setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [referenceFilter, setReferenceFilter] = useState("");
+  const [createdAtFilter, setCreatedAtFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
@@ -107,10 +109,12 @@ export default function AppealsPage() {
   const navigate = useNavigate();
   const { data: appealsData, isLoading } = useGetAppeals({
     params: {
-      // search: searchTerm,
-      // status: statusFilter,
-      // limit: pageSize,
-      // offset: (currentPage - 1) * pageSize,
+      search: searchTerm,
+      status: statusFilter,
+      reference_number: referenceFilter,
+      created_at: createdAtFilter,
+      limit: pageSize,
+      offset: (currentPage - 1) * pageSize,
     },
   });
 
@@ -193,31 +197,46 @@ export default function AppealsPage() {
         <h1 className="text-2xl font-bold">{t("navigation.appeals")}</h1>
       </div>
 
-      <div className="mb-4 flex gap-4">
-        <input
-          type="text"
-          placeholder={t("placeholders.search_appeals")}
-          className="flex-1 p-2 border rounded"
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setCurrentPage(1); // Reset to first page when searching
-          }}
-        />
-        <select
-          value={statusFilter}
-          onChange={(e) => {
-            setStatusFilter(e.target.value);
-            setCurrentPage(1); // Reset to first page when filtering
-          }}
-          className="p-2 border rounded min-w-[200px]"
-        >
-          <option value="">{t("placeholders.all_statuses")}</option>
-          <option value="Рассматривается">Рассматривается</option>
-          <option value="Принято">Принято</option>
-          <option value="Отправлено">Отправлено</option>
-          <option value="Отказано">Отказано</option>
-        </select>
+      <div className="mb-4 flex flex-col gap-4">
+        <div className="flex gap-4">
+         
+          <select
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="p-2 border rounded min-w-[200px]"
+          >
+            <option value="">{t("placeholders.all_statuses")}</option>
+            <option value="Рассматривается">Рассматривается</option>
+            <option value="Принято">Принято</option>
+            <option value="Отправлено">Отправлено</option>
+            <option value="Отказано">Отказано</option>
+          </select>
+        </div>
+        <div className="flex gap-4">
+          <input
+            type="text"
+            placeholder='Номер обращения'
+            className="flex-1 p-2 border rounded"
+            value={referenceFilter}
+            onChange={(e) => {
+              setReferenceFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+          <input
+            type="date"
+            placeholder="Created At"
+            className="flex-1 p-2 border rounded"
+            value={createdAtFilter}
+            onChange={(e) => {
+              setCreatedAtFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+        </div>
       </div>
 
       <ResourceTable

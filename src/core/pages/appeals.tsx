@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { ResourceTable } from "../helpers/ResourseTable";
@@ -8,7 +8,7 @@ import { ResourceForm } from "../helpers/ResourceForm";
 import { toast } from "sonner";
 import { type Appeal, useGetAppeals, useUpdateAppeal } from "../api/appeals";
 import { Button } from "@/components/ui/button";
-import { DownloadIcon } from "lucide-react";
+import { MoreHorizontal, Edit, Download,  MessageSquare } from "lucide-react";
 import api from "../api/api";
 
 interface TranslationFunction {
@@ -191,6 +191,165 @@ export default function AppealsPage() {
     setCurrentPage(page);
   };
 
+  // Custom dropdown component for actions
+  const ActionsDropdown = ({ row }: { row: Appeal }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [dropdownPosition, setDropdownPosition] = useState<{
+      top: number;
+      left: number;
+      position: "bottom" | "top";
+    }>({
+      top: 0,
+      left: 0,
+      position: "bottom",
+    });
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
+    const calculatePosition = () => {
+      if (!buttonRef.current) return;
+
+      const rect = buttonRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+
+      const dropdownHeight = 120; // Approximate height for our dropdown
+      const spaceBelow = viewportHeight - rect.bottom - 10;
+      const spaceAbove = rect.top - 10;
+
+      const position = spaceBelow < dropdownHeight && spaceAbove > dropdownHeight
+        ? "top"
+        : "bottom";
+
+      const dropdownWidth = 192;
+      let left = rect.left;
+
+      if (left + dropdownWidth > viewportWidth) {
+        left = rect.right - dropdownWidth;
+      }
+
+      if (left < 10) {
+        left = 10;
+      }
+
+      let top;
+      if (position === "top") {
+        top = rect.top - dropdownHeight;
+      } else {
+        top = rect.bottom + 4;
+      }
+
+      if (top < 10) {
+        top = 10;
+      }
+
+      if (top + dropdownHeight > viewportHeight - 10) {
+        top = viewportHeight - dropdownHeight - 10;
+      }
+
+      setDropdownPosition({ top, left, position });
+    };
+
+    const handleToggle = (event: React.MouseEvent) => {
+      event.stopPropagation();
+      if (!isOpen) {
+        calculatePosition();
+      }
+      setIsOpen(!isOpen);
+    };
+
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          dropdownRef.current &&
+          !dropdownRef.current.contains(event.target as Node) &&
+          buttonRef.current &&
+          !buttonRef.current.contains(event.target as Node)
+        ) {
+          setIsOpen(false);
+        }
+      };
+
+      if (isOpen) {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+      }
+    }, [isOpen]);
+
+    return (
+      <div className="relative">
+        <Button
+          ref={buttonRef}
+          variant="ghost"
+          size="sm"
+          onClick={handleToggle}
+          className="h-8 w-8 p-0"
+        >
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+
+        {isOpen &&
+          createPortal(
+            <div
+              ref={dropdownRef}
+              className="fixed z-[9999] w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1"
+              style={{
+                top: `${dropdownPosition.top}px`,
+                left: `${dropdownPosition.left}px`,
+                maxHeight: "300px",
+                overflowY: "auto",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex flex-col">
+               
+
+                {/* Edit Button */}
+                <button
+                  className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEdit(row);
+                    setIsOpen(false);
+                  }}
+                >
+                  <Edit className="mr-2 h-4 w-4" />
+                  {t("actions.edit")}
+                </button>
+
+                {/* Answer Button */}
+                <button
+                  className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAnswer(row);
+                    setIsOpen(false);
+                  }}
+                >
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  {t("actions.answer")}
+                </button>
+
+                {/* Download PDF Button */}
+                <button
+                  className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDownloadPdf(row);
+                    setIsOpen(false);
+                  }}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  {t("actions.download")}
+                </button>
+              </div>
+            </div>,
+            document.body,
+          )}
+      </div>
+    );
+  };
+
   return (
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center mb-6">
@@ -243,21 +402,7 @@ export default function AppealsPage() {
         data={enhancedAppeals}
         columns={columns(t)}
         isLoading={isLoading}
-        onEdit={handleEdit}
-        onAnswer={handleAnswer}
-        actions={(appeal) => (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleDownloadPdf(appeal)}
-            className="h-8 w-8 p-0 hover:bg-green-50 text-green-500"
-            title="Download PDF"
-          >
-            <DownloadIcon className="h-4 w-4" />
-          </Button>
-        )}
-        // onDelete={handleDelete} // Uncomment if delete functionality is needed
-        // onAdd={() => navigate('/create-appeal')} // Uncomment if create functionality is needed
+        actions={(appeal) => <ActionsDropdown row={appeal} />}
         totalCount={totalCount}
         pageSize={pageSize}
         currentPage={currentPage}

@@ -49,6 +49,12 @@
     "appeal_text": "Текст обращения",
     "answerer": "Ответственный"
   },
+  "actions":{
+
+    "edit":"Редактировать",
+    "answer":"Ответить",
+    "download":"Скачать"
+  },
   "placeholders": {
     "select_appeal": "Выберите обращение",
     "enter_response_text": "Введите текст ответа",

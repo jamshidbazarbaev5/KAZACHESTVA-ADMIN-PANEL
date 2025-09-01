@@ -6,9 +6,23 @@ import { ResourceTable } from "../helpers/ResourseTable";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ResourceForm } from "../helpers/ResourceForm";
 import { toast } from "sonner";
-import { type Appeal, useGetAppeals, useUpdateAppeal } from "../api/appeals";
+import {
+  type Appeal,
+  useGetAppeals,
+  useUpdateAppeal,
+  useGetAppealsDashboard,
+} from "../api/appeals";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Edit, Download,  MessageSquare } from "lucide-react";
+import {
+  MoreHorizontal,
+  Edit,
+  Download,
+  MessageSquare,
+  FileText,
+  Clock,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 import api from "../api/api";
 
 interface TranslationFunction {
@@ -101,18 +115,22 @@ export default function AppealsPage() {
   const [searchTerm, _setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [referenceFilter, setReferenceFilter] = useState("");
-  const [createdAtFilter, setCreatedAtFilter] = useState("");
+  const [createdAtFromFilter, setCreatedAtFromFilter] = useState("");
+  const [createdAtToFilter, setCreatedAtToFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { data: dashboardData, isLoading: isDashboardLoading } =
+    useGetAppealsDashboard();
   const { data: appealsData, isLoading } = useGetAppeals({
     params: {
       search: searchTerm,
       status: statusFilter,
       reference_number: referenceFilter,
-      created_at: createdAtFilter,
+      created_at_from: createdAtFromFilter,
+      created_at_to: createdAtToFilter,
       limit: pageSize,
       offset: (currentPage - 1) * pageSize,
     },
@@ -217,9 +235,10 @@ export default function AppealsPage() {
       const spaceBelow = viewportHeight - rect.bottom - 10;
       const spaceAbove = rect.top - 10;
 
-      const position = spaceBelow < dropdownHeight && spaceAbove > dropdownHeight
-        ? "top"
-        : "bottom";
+      const position =
+        spaceBelow < dropdownHeight && spaceAbove > dropdownHeight
+          ? "top"
+          : "bottom";
 
       const dropdownWidth = 192;
       let left = rect.left;
@@ -272,7 +291,8 @@ export default function AppealsPage() {
 
       if (isOpen) {
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        return () =>
+          document.removeEventListener("mousedown", handleClickOutside);
       }
     }, [isOpen]);
 
@@ -302,8 +322,6 @@ export default function AppealsPage() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col">
-               
-
                 {/* Edit Button */}
                 <button
                   className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -350,15 +368,89 @@ export default function AppealsPage() {
     );
   };
 
+  // Dashboard component for statistics
+  const DashboardStats = () => {
+    if (isDashboardLoading) {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="bg-white p-6 rounded-lg shadow-sm border animate-pulse"
+            >
+              <div className="h-4 bg-gray-200 rounded mb-2"></div>
+              <div className="h-8 bg-gray-200 rounded"></div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (!dashboardData?.appeal) return null;
+
+    const getStatusIcon = (status: string) => {
+      switch (status) {
+        case "Отправлено":
+          return <FileText className="h-6 w-6 text-blue-600" />;
+        case "Принято":
+          return <CheckCircle className="h-6 w-6 text-green-600" />;
+        case "Отказано":
+          return <XCircle className="h-6 w-6 text-red-600" />;
+        case "Рассматривается":
+          return <Clock className="h-6 w-6 text-yellow-600" />;
+        default:
+          return <FileText className="h-6 w-6 text-gray-600" />;
+      }
+    };
+
+    const getStatusColor = (status: string) => {
+      switch (status) {
+        case "Отправлено":
+          return "border-blue-200 bg-blue-50";
+        case "Принято":
+          return "border-green-200 bg-green-50";
+        case "Отказано":
+          return "border-red-200 bg-red-50";
+        case "Рассматривается":
+          return "border-yellow-200 bg-yellow-50";
+        default:
+          return "border-gray-200 bg-gray-50";
+      }
+    };
+
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {dashboardData.appeal.map((stat) => (
+          <div
+            key={stat.status}
+            className={`p-6 rounded-lg shadow-sm border-2 ${getStatusColor(stat.status)}`}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">
+                  {stat.status}
+                </p>
+                <p className="text-3xl font-bold text-gray-900">{stat.total}</p>
+              </div>
+              <div className="flex-shrink-0">{getStatusIcon(stat.status)}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">{t("navigation.appeals")}</h1>
       </div>
 
+      {/* Dashboard Statistics */}
+      <DashboardStats />
+
       <div className="mb-4 flex flex-col gap-4">
         <div className="flex gap-4">
-         
           <select
             value={statusFilter}
             onChange={(e) => {
@@ -377,7 +469,7 @@ export default function AppealsPage() {
         <div className="flex gap-4">
           <input
             type="text"
-            placeholder='Номер обращения'
+            placeholder="Номер обращения"
             className="flex-1 p-2 border rounded"
             value={referenceFilter}
             onChange={(e) => {
@@ -387,11 +479,21 @@ export default function AppealsPage() {
           />
           <input
             type="date"
-            placeholder="Created At"
+            placeholder="Created At From"
             className="flex-1 p-2 border rounded"
-            value={createdAtFilter}
+            value={createdAtFromFilter}
             onChange={(e) => {
-              setCreatedAtFilter(e.target.value);
+              setCreatedAtFromFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+          <input
+            type="date"
+            placeholder="Created At To"
+            className="flex-1 p-2 border rounded"
+            value={createdAtToFilter}
+            onChange={(e) => {
+              setCreatedAtToFilter(e.target.value);
               setCurrentPage(1);
             }}
           />

@@ -59,6 +59,15 @@ export interface AppealsResponse {
   results: Appeal[];
 }
 
+export interface AppealStatusStat {
+  status: string;
+  total: number;
+}
+
+export interface AppealsDashboardResponse {
+  appeal: AppealStatusStat[];
+}
+
 // API endpoints
 const APPEALS_LIST_URL = "appeals/list";
 
@@ -99,6 +108,18 @@ export const useUpdateAppeal = () => {
       if (data.id) {
         queryClient.invalidateQueries({ queryKey: ["appeals", data.id] });
       }
+    },
+  });
+};
+
+// Custom hook for getting appeals dashboard statistics
+export const useGetAppealsDashboard = () => {
+  return useQuery({
+    queryKey: ["appeals", "dashboard"],
+    queryFn: async () => {
+      const response =
+        await api.get<AppealsDashboardResponse>("appeals/dashboard/");
+      return response.data;
     },
   });
 };

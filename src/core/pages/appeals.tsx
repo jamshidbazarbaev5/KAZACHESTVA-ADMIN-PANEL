@@ -109,10 +109,43 @@ const columns = (t: TranslationFunction) => [
   },
 ];
 
+// Helper function to build API params, only including values that are truthy
+const buildApiParams = (filters: {
+  status?: string;
+  referenceNumber?: string;
+  createdAtFrom?: string;
+  createdAtTo?: string;
+  limit: number;
+  offset: number;
+}) => {
+  const params: any = {
+    limit: filters.limit,
+    offset: filters.offset,
+  };
+
+  if (filters.status) {
+    params.status = filters.status;
+  }
+
+  if (filters.referenceNumber) {
+    params.reference_number = filters.referenceNumber;
+  }
+
+  if (filters.createdAtFrom) {
+    params.created_at_from = filters.createdAtFrom;
+  }
+
+  if (filters.createdAtTo) {
+    params.created_at_to = filters.createdAtTo;
+  }
+
+  return params;
+};
+
 export default function AppealsPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingAppeal, setEditingAppeal] = useState<Appeal | null>(null);
-  const [searchTerm, _setSearchTerm] = useState("");
+  const [_searchTerm, _setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [referenceFilter, setReferenceFilter] = useState("");
   const [createdAtFromFilter, setCreatedAtFromFilter] = useState("");
@@ -125,15 +158,14 @@ export default function AppealsPage() {
   const { data: dashboardData, isLoading: isDashboardLoading } =
     useGetAppealsDashboard();
   const { data: appealsData, isLoading } = useGetAppeals({
-    params: {
-      search: searchTerm,
+    params: buildApiParams({
       status: statusFilter,
-      reference_number: referenceFilter,
-      created_at_from: createdAtFromFilter,
-      created_at_to: createdAtToFilter,
+      referenceNumber: referenceFilter,
+      createdAtFrom: createdAtFromFilter,
+      createdAtTo: createdAtToFilter,
       limit: pageSize,
       offset: (currentPage - 1) * pageSize,
-    },
+    }),
   });
 
   const fields = appealFields(t);

@@ -22,6 +22,7 @@ import {
   Clock,
   CheckCircle,
   XCircle,
+  TrendingUp,
 } from "lucide-react";
 import api from "../api/api";
 
@@ -404,16 +405,30 @@ export default function AppealsPage() {
   const DashboardStats = () => {
     if (isDashboardLoading) {
       return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          {[1, 2, 3, 4].map((i) => (
-            <div
-              key={i}
-              className="bg-white p-6 rounded-lg shadow-sm border animate-pulse"
-            >
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-8 bg-gray-200 rounded"></div>
+        <div className="space-y-6 mb-6">
+          {/* Total Appeals Card Skeleton */}
+          <div className="bg-white p-6 rounded-lg shadow-lg border animate-pulse">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="h-4 bg-gray-200 rounded mb-2 w-24"></div>
+                <div className="h-10 bg-gray-200 rounded w-16"></div>
+              </div>
+              <div className="h-8 w-8 bg-gray-200 rounded"></div>
             </div>
-          ))}
+          </div>
+
+          {/* Status Cards Skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="bg-white p-6 rounded-lg shadow-sm border animate-pulse"
+              >
+                <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                <div className="h-8 bg-gray-200 rounded"></div>
+              </div>
+            ))}
+          </div>
         </div>
       );
     }
@@ -451,23 +466,47 @@ export default function AppealsPage() {
     };
 
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {dashboardData.appeal.map((stat) => (
-          <div
-            key={stat.status}
-            className={`p-6 rounded-lg shadow-sm border-2 ${getStatusColor(stat.status)}`}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">
-                  {stat.status}
-                </p>
-                <p className="text-3xl font-bold text-gray-900">{stat.total}</p>
-              </div>
-              <div className="flex-shrink-0">{getStatusIcon(stat.status)}</div>
+      <div className="space-y-6 mb-6">
+        {/* Total Appeals Card */}
+        <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-lg shadow-lg text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-blue-100">
+                {t("common.total_appeals")}
+              </p>
+              <p className="text-4xl font-bold text-white">
+                {dashboardData.total_appeal}
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <TrendingUp className="h-8 w-8 text-blue-200" />
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* Status Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {dashboardData.appeal.map((stat) => (
+            <div
+              key={stat.status}
+              className={`p-6 rounded-lg shadow-sm border-2 ${getStatusColor(stat.status)}`}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">
+                    {stat.status}
+                  </p>
+                  <p className="text-3xl font-bold text-gray-900">
+                    {stat.total}
+                  </p>
+                </div>
+                <div className="flex-shrink-0">
+                  {getStatusIcon(stat.status)}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   };

@@ -13,7 +13,8 @@
     "answer": "Ответить",
     "loading": "Загрузка",
     "profile": "Профиль",
-    "logout": "Выйти"
+    "logout": "Выйти",
+    "total_appeals": "Всего обращений"
   },
   "buttons": {
     "add_response": "Добавить ответ",
@@ -26,9 +27,9 @@
     "staff": "Сотрудники"
   },
   "forms": {
-    "sender":"О9тправитель",
-    "sender_quantity":"Количество отправки",
-    "appeal_information":"Информация",
+    "sender": "О9тправитель",
+    "sender_quantity": "Количество отправки",
+    "appeal_information": "Информация",
     "appeal": "Обращения",
     "appeal_reference": "Номер обращения",
     "response_text": "Текст ответа",
@@ -49,11 +50,10 @@
     "appeal_text": "Текст обращения",
     "answerer": "Ответственный"
   },
-  "actions":{
-
-    "edit":"Редактировать",
-    "answer":"Ответить",
-    "download":"Скачать"
+  "actions": {
+    "edit": "Редактировать",
+    "answer": "Ответить",
+    "download": "Скачать"
   },
   "placeholders": {
     "select_appeal": "Выберите обращение",

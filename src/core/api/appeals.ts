@@ -66,6 +66,7 @@ export interface AppealStatusStat {
 
 export interface AppealsDashboardResponse {
   appeal: AppealStatusStat[];
+  total_appeal: number;
 }
 
 // API endpoints

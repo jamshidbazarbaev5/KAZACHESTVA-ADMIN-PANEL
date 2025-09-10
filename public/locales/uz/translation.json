@@ -1,0 +1,96 @@
+{
+  "common": {
+    "cancel": "Bekor qilish",
+    "back": "Orqaga",
+    "delete": "O'chirish",
+    "create": "Yaratish",
+    "submit": "Yuborish",
+    "sending": "Yuborilmoqda...",
+    "save": "Saqlash",
+    "saving": "Saqlanmoqda...",
+    "edit": "Tahrirlash",
+    "update": "Yangilash",
+    "answer": "Javob berish",
+    "loading": "Yuklanmoqda",
+    "profile": "Profil",
+    "logout": "Chiqish",
+    "total_appeals": "Jami murojaatlar"
+  },
+  "buttons": {
+    "add_response": "Javob qo'shish",
+    "add_staff": "Xodim qo'shish"
+  },
+  "navigation": {
+    "appeals": "Murojaatlar",
+    "appeal_categories": "Murojaat kategoriyalari",
+    "responses": "Javoblar",
+    "staff": "Xodimlar"
+  },
+  "forms": {
+    "sender": "Yuboruvchi",
+    "sender_quantity": "Yuborish soni",
+    "appeal_information": "Ma'lumot",
+    "appeal": "Murojaat",
+    "appeal_reference": "Murojaat raqami",
+    "response_text": "Javob matni",
+    "full_name": "To'liq ism",
+    "phone": "Telefon",
+    "email": "Email",
+    "category_name": "Kategoriya nomi",
+    "created_at": "Yaratilgan sana",
+    "status": "Holat",
+    "region": "Viloyat",
+    "reference_number": "Murojaat raqami",
+    "sender_name": "Yuboruvchi ismi",
+    "sender_email": "Yuboruvchi emaili",
+    "sender_phone": "Yuboruvchi telefoni",
+    "category": "Kategoriya",
+    "attached_files": "Biriktirilgan fayllar",
+    "view_file": "Faylni ko'rish",
+    "appeal_text": "Murojaat matni",
+    "answerer": "Javobgar"
+  },
+  "actions": {
+    "edit": "Tahrirlash",
+    "answer": "Javob berish",
+    "download": "Yuklab olish",
+    "delete": "O'chirish"
+  },
+  "placeholders": {
+    "select_appeal": "Murojaatni tanlang",
+    "enter_response_text": "Javob matnini kiriting",
+    "search_appeals": "Murojaatlarni qidirish",
+    "search_responses": "Javoblarni qidirish",
+    "search_staff": "Xodimlarni qidirish",
+    "enter_full_name": "To'liq ismni kiriting",
+    "enter_phone": "Telefon raqamini kiriting",
+    "enter_email": "Email manzilini kiriting",
+    "all_statuses": "Barcha holatlar",
+    "select": "Tanlang...",
+    "enter_name": "Nomini kiriting",
+    "search_appeal_category": "Murojaat kategoriyalarini qidirish",
+    "select_status": "Holatni tanlang",
+    "enter_region": "Viloyatni kiriting",
+    "select_answerer": "Javobgarni tanlang"
+  },
+  "messages": {
+    "confirm_delete": "O'chirish",
+    "edit": "Tahrirlash",
+    "details": "Tafsilotlar",
+    "existing_response": "Mavjud javob",
+    "success": {
+      "created": "{{item}} muvaffaqiyatli yaratildi",
+      "updated": "{{item}} muvaffaqiyatli yangilandi",
+      "deleted": "{{item}} muvaffaqiyatli o'chirildi"
+    },
+    "error": {
+      "create": "{{item}}ni yaratishda xatolik yuz berdi",
+      "update": "{{item}}ni yangilashda xatolik yuz berdi",
+      "delete": "{{item}}ni o'chirishda xatolik yuz berdi",
+      "not_found": "{{item}} topilmadi"
+    }
+  },
+  "currency": {
+    "set": "Valyuta kursini o'rnatish"
+  }
+}

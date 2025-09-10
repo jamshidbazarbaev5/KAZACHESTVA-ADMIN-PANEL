@@ -76,11 +76,24 @@ const APPEALS_LIST_URL = "appeals/list";
 export const {
   useGetResources: useGetAppeals,
   useCreateResource: useCreateAppeal,
-  useDeleteResource: useDeleteAppeal,
 } = createResourceApiHooks<Appeal, AppealsResponse>(
   APPEALS_LIST_URL,
   "appeals",
 );
+
+// Custom hook for deleting appeals with correct endpoint
+export const useDeleteAppeal = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (appealId: number) => {
+      await api.delete(`appeals/${appealId}/delete/`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["appeals"] });
+    },
+  });
+};
 
 // Custom hook for getting single appeal with correct endpoint
 export const useGetAppeal = (id: number) => {

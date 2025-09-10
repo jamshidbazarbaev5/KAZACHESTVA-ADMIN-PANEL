@@ -53,7 +53,8 @@
   "actions": {
     "edit": "Редактировать",
     "answer": "Ответить",
-    "download": "Скачать"
+    "download": "Скачать",
+    "delete":"Удалить"
   },
   "placeholders": {
     "select_appeal": "Выберите обращение",
@@ -73,6 +74,7 @@
     "select_answerer": "Выберите ответственного"
   },
   "messages": {
+    "confirm_delete":"Удалить",
     "edit": "Редактировать",
     "details": "Детали",
     "existing_response": "Существующий ответ",

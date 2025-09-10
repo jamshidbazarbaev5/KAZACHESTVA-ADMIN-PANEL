@@ -11,6 +11,7 @@ import {
   useGetAppeals,
   useUpdateAppeal,
   useGetAppealsDashboard,
+  useDeleteAppeal,
 } from "../api/appeals";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +24,7 @@ import {
   CheckCircle,
   XCircle,
   TrendingUp,
+  Trash2,
 } from "lucide-react";
 import api from "../api/api";
 
@@ -182,6 +184,7 @@ export default function AppealsPage() {
   }));
 
   const { mutate: updateAppeal, isPending: isUpdating } = useUpdateAppeal();
+  const { mutate: deleteAppeal } = useDeleteAppeal();
 
   const handleEdit = (appeal: Appeal) => {
     navigate(`/edit-appeal/${appeal.id}`);
@@ -189,6 +192,19 @@ export default function AppealsPage() {
 
   const handleAnswer = (appeal: Appeal) => {
     navigate(`/answer-appeal/${appeal.id}`);
+  };
+
+  const handleDelete = (appeal: Appeal) => {
+    if (window.confirm(t("messages.confirm_delete"))) {
+      deleteAppeal(appeal.id, {
+        onSuccess: () => {
+          toast.success(t("messages.success.deleted", { item: t("navigation.appeals") }));
+        },
+        onError: () => {
+          toast.error(t("messages.error.delete", { item: t("navigation.appeals") }));
+        },
+      });
+    }
   };
 
   const handleDownloadPdf = async (appeal: Appeal) => {
@@ -392,6 +408,19 @@ export default function AppealsPage() {
                 >
                   <Download className="mr-2 h-4 w-4" />
                   {t("actions.download")}
+                </button>
+
+                {/* Delete Button */}
+                <button
+                  className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(row);
+                    setIsOpen(false);
+                  }}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  {t("actions.delete")}
                 </button>
               </div>
             </div>,

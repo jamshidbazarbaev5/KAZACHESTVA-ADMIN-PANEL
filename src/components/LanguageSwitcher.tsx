@@ -12,12 +12,21 @@ export const LanguageSwitcher = () => {
   return (
     <Select value={currentLanguage} onValueChange={changeLanguage}>
       <SelectTrigger size="sm">
-        <span>{currentLanguage === 'ru' ? 'Руский' : 'Каракалпак'}</span>
+        <span>
+          {currentLanguage === 'ru' ? 'Руский' : 
+           currentLanguage === 'uz' ? "O'zbek" : 
+           'Каракалпак'}
+        </span>
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="ru">
           <div className="flex items-center">
-            <span >Руский</span>
+            <span>Руский</span>
+          </div>
+        </SelectItem>
+        <SelectItem value="uz">
+          <div className="flex items-center">
+            <span>O'zbek</span>
           </div>
         </SelectItem>
         <SelectItem value="kaa">

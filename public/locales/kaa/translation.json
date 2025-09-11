@@ -80,6 +80,12 @@
       "not_found": "{{item}} tapılmadı"
     }
   },
+  "status": {
+    "under_review": "Qarap shıǵılmaqta",
+    "accepted": "Qabıl etildi",
+    "sent": "Jiberildi",
+    "rejected": "Biykar etildi"
+  },
   "currency": {
     "set": "Walýuta kursın belgilew"
   }

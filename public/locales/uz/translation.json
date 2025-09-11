@@ -56,6 +56,12 @@
     "download": "Yuklab olish",
     "delete": "O'chirish"
   },
+  "status": {
+    "under_review": "Ko'rib chiqilmoqda",
+    "accepted": "Qabul qilindi",
+    "sent": "Yuborildi",
+    "rejected": "Rad etildi"
+  },
   "placeholders": {
     "select_appeal": "Murojaatni tanlang",
     "enter_response_text": "Javob matnini kiriting",

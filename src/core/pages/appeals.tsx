@@ -32,16 +32,32 @@ interface TranslationFunction {
   (key: string, options?: Record<string, unknown>): string;
 }
 
+// Map API status (Russian) to our translation keys
+const mapStatusToKey = (status: string) => {
+  switch (status) {
+    case "Отправлено":
+      return "sent";
+    case "Принято":
+      return "accepted";
+    case "Отказано":
+      return "rejected";
+    case "Рассматривается":
+      return "under_review";
+    default:
+      return status;
+  }
+};
+
 const appealFields = (t: TranslationFunction) => [
   {
     name: "status",
     label: t("forms.status"),
     type: "select",
     options: [
-      { value: "Рассматривается", label: "Рассматривается" },
-      { value: "Принято", label: "Принято" },
-      { value: "Отправлено", label: "Отправлено" },
-      { value: "Отказано", label: "Отказано" },
+      { value: "under_review", label: t("status.under_review") },
+      { value: "accepted", label: t("status.accepted") },
+      { value: "sent", label: t("status.sent") },
+      { value: "rejected", label: t("status.rejected") },
     ],
     placeholder: t("placeholders.select_status"),
     required: true,
@@ -88,20 +104,21 @@ const columns = (t: TranslationFunction) => [
     header: t("forms.status"),
     accessorKey: "status",
     cell: (row: Appeal) => {
+      const mappedStatus = mapStatusToKey(row.status);
       const statusColors = {
-        Рассматривается: "bg-yellow-100 text-yellow-800",
-        Принято: "bg-green-100 text-green-800",
-        Отправлено: "bg-blue-100 text-blue-800",
-        Отказано: "bg-red-100 text-red-800",
+        under_review: "bg-yellow-100 text-yellow-800",
+        accepted: "bg-green-100 text-green-800",
+        sent: "bg-blue-100 text-blue-800",
+        rejected: "bg-red-100 text-red-800",
       };
       const colorClass =
-        statusColors[row.status as keyof typeof statusColors] ||
+        statusColors[mappedStatus as keyof typeof statusColors] ||
         "bg-gray-100 text-gray-800";
       return (
         <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${colorClass}`}
         >
-          {row.status}
+          {t(`status.${mappedStatus}`)}
         </span>
       );
     },
@@ -465,14 +482,15 @@ export default function AppealsPage() {
     if (!dashboardData?.appeal) return null;
 
     const getStatusIcon = (status: string) => {
-      switch (status) {
-        case "Отправлено":
+      const mappedStatus = mapStatusToKey(status);
+      switch (mappedStatus) {
+        case "sent":
           return <FileText className="h-6 w-6 text-blue-600" />;
-        case "Принято":
+        case "accepted":
           return <CheckCircle className="h-6 w-6 text-green-600" />;
-        case "Отказано":
+        case "rejected":
           return <XCircle className="h-6 w-6 text-red-600" />;
-        case "Рассматривается":
+        case "under_review":
           return <Clock className="h-6 w-6 text-yellow-600" />;
         default:
           return <FileText className="h-6 w-6 text-gray-600" />;
@@ -480,14 +498,15 @@ export default function AppealsPage() {
     };
 
     const getStatusColor = (status: string) => {
-      switch (status) {
-        case "Отправлено":
+      const mappedStatus = mapStatusToKey(status);
+      switch (mappedStatus) {
+        case "sent":
           return "border-blue-200 bg-blue-50";
-        case "Принято":
+        case "accepted":
           return "border-green-200 bg-green-50";
-        case "Отказано":
+        case "rejected":
           return "border-red-200 bg-red-50";
-        case "Рассматривается":
+        case "under_review":
           return "border-yellow-200 bg-yellow-50";
         default:
           return "border-gray-200 bg-gray-50";
@@ -523,7 +542,7 @@ export default function AppealsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">
-                    {stat.status}
+                    {t(`status.${mapStatusToKey(stat.status)}`)}
                   </p>
                   <p className="text-3xl font-bold text-gray-900">
                     {stat.total}
@@ -560,16 +579,16 @@ export default function AppealsPage() {
             className="p-2 border rounded min-w-[200px]"
           >
             <option value="">{t("placeholders.all_statuses")}</option>
-            <option value="Рассматривается">Рассматривается</option>
-            <option value="Принято">Принято</option>
-            <option value="Отправлено">Отправлено</option>
-            <option value="Отказано">Отказано</option>
+            <option value="Рассматривается">{t("status.under_review")}</option>
+            <option value="Принято">{t("status.accepted")}</option>
+            <option value="Отправлено">{t("status.sent")}</option>
+            <option value="Отказано">{t("status.rejected")}</option>
           </select>
         </div>
         <div className="flex gap-4">
           <input
             type="text"
-            placeholder="Номер обращения"
+            placeholder={t('forms.reference_number')}
             className="flex-1 p-2 border rounded"
             value={referenceFilter}
             onChange={(e) => {

@@ -56,6 +56,12 @@
     "download": "Скачать",
     "delete":"Удалить"
   },
+   "status": {
+    "under_review": "Рассматривается",
+    "accepted": "Принято",
+    "sent": "Отправлено",
+    "rejected": "Отказано"
+  },
   "placeholders": {
     "select_appeal": "Выберите обращение",
     "enter_response_text": "Введите текст ответа",
